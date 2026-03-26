@@ -51,10 +51,14 @@ section[data-testid="stSidebar"] {
 # =========================
 @st.cache_data
 def load_data():
-    conn = sqlite3.connect("backend/db.sqlite3")
-    df = pd.read_sql_query("SELECT * FROM orders_order", conn)
-    df.columns = df.columns.str.strip().str.replace(" ", "_")
+    df = pd.read_csv("data/orders.csv", encoding="latin1")
+
+    # clean columns
+    df.columns = df.columns.str.strip().str.replace(" ", "_").str.lower()
+
+    # fix date column
     df["order_date"] = pd.to_datetime(df["order_date"])
+
     return df
 
 df = load_data()
